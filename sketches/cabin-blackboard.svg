@@ -1,0 +1,32 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 620 430">
+<style>@import url('https://fonts.googleapis.com/css2?family=Gaegu:wght@400;700&amp;display=swap');.g{font-family:'Gaegu',cursive;}</style>
+<rect x="0" y="0" width="620" height="430" fill="#5b4636"/>
+<g stroke="#523f30" stroke-width="2">
+  <line x1="93" y1="0" x2="93" y2="430"/>
+  <line x1="187" y1="0" x2="187" y2="430"/>
+  <line x1="281" y1="0" x2="281" y2="430"/>
+  <line x1="375" y1="0" x2="375" y2="430"/>
+  <line x1="469" y1="0" x2="469" y2="430"/>
+  <line x1="563" y1="0" x2="563" y2="430"/>
+</g>
+<text x="24" y="32" class="g" fill="#e9dcc7" font-size="16">&#8249; 숲으로 돌아가기</text>
+
+<rect x="20" y="48" width="580" height="340" rx="4" fill="#3a2c20"/>
+<rect x="32" y="60" width="556" height="316" fill="#2d453b"/>
+
+<text x="56" y="106" class="g" fill="#f5f0e6" font-size="30" font-weight="700">안경 · 눈 관</text>
+<g transform="translate(238,97)">
+  <ellipse cx="0" cy="0" rx="18" ry="11" fill="none" stroke="#f5f0e6" stroke-width="2"/>
+  <circle cx="0" cy="0" r="5" fill="#f5f0e6"/>
+</g>
+<text x="56" y="132" class="g" fill="#a9c4b3" font-size="16">— 이 오두막의 필기 목록</text>
+
+<text x="56" y="176" class="g" fill="#f2d675" font-size="21">✎ 난시가 보는 세상 <tspan fill="#8fae9c" font-size="14">— 시뮬 있음</tspan></text>
+<text x="56" y="208" class="g" fill="#f5f0e6" font-size="21">· 노안, 왜 갑자기 팔이 짧아질까</text>
+<text x="56" y="240" class="g" fill="#f5f0e6" font-size="21">· 블루라이트 차단, 효과 있을까 없을까</text>
+<text x="56" y="272" class="g" fill="#f5f0e6" font-size="21">· 내 눈에 맞는 렌즈 고르는 법</text>
+<text x="56" y="306" class="g" fill="#8fae9c" font-size="18">· · · (분필로 계속 늘어남)</text>
+
+<rect x="40" y="400" width="44" height="7" rx="3.5" fill="#e9dcc7"/>
+<text x="96" y="408" class="g" fill="#cdbba3" font-size="14">분필 &amp; 지우개</text>
+</svg>

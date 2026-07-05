@@ -1,0 +1,145 @@
+@import "tailwindcss";
+
+/* choo-studio 팔레트 · 폰트 토큰 (Tailwind v4 @theme → :root CSS 변수로도 노출됨) */
+@theme {
+  --font-hand: "Gaegu", cursive;
+
+  --color-paper: #f4eede;
+  --color-paper-line: #e3dcc6;
+  --color-ink: #3a352c;
+  --color-ink-soft: #7a7259;
+
+  --color-wood: #5b4636;
+  --color-wood-warm: #6b4f36;
+  --color-wood-plank: #7a5c3e;
+
+  --color-board: #2d453b;
+  --color-board-frame: #3a2c20;
+  --color-chalk: #f5f0e6;
+  --color-chalk-yellow: #f2d675;
+  --color-chalk-soft: #a9c4b3;
+
+  --color-forest: #6f8a5c;
+  --color-forest-leaf: #bcd6ac;
+
+  --color-eyes: #3f6f9f;
+  --color-math: #4a7a5a;
+  --color-ai: #7a6aab;
+  --color-talk: #c0562f;
+}
+
+body {
+  margin: 0;
+  font-family: system-ui, -apple-system, "Segoe UI", sans-serif;
+  color: var(--color-ink);
+}
+
+.hand {
+  font-family: var(--font-hand);
+}
+
+a {
+  color: inherit;
+}
+
+/* 드래그 선택도 형광펜 느낌 */
+::selection {
+  background: #f2d675;
+  color: #3a352c;
+}
+
+/* 공책 본문 — 인쇄체 산세리프 */
+.notebook-body {
+  font-size: 1rem;
+  line-height: 2.05;
+  color: var(--color-ink);
+}
+.notebook-body p {
+  margin: 0 0 1.1rem;
+}
+.notebook-body h2 {
+  font-family: var(--font-hand);
+  color: var(--color-eyes);
+  font-size: 1.5rem;
+  margin: 1.6rem 0 0.6rem;
+}
+.notebook-body h3 {
+  font-family: var(--font-hand);
+  color: var(--color-ink-soft);
+  font-size: 1.25rem;
+  margin: 1.3rem 0 0.5rem;
+}
+.notebook-body code {
+  font-family: var(--font-hand);
+  background: #eef3ee;
+  color: var(--color-math);
+  padding: 1px 8px;
+  border-radius: 4px;
+}
+/* 강조 = 노란 형광펜 */
+.notebook-body strong {
+  font-weight: 700;
+  background: linear-gradient(transparent 58%, rgba(242, 214, 117, 0.75) 58%, rgba(242, 214, 117, 0.75) 92%, transparent 92%);
+  padding: 0 2px;
+}
+.notebook-body em {
+  font-style: normal;
+  font-family: var(--font-hand);
+  color: var(--color-ink-soft);
+}
+.notebook-body blockquote {
+  margin: 1.2rem 0;
+  padding: 0.2rem 0 0.2rem 1rem;
+  border-left: 3px solid var(--color-talk);
+  color: var(--color-ink-soft);
+}
+.notebook-body ul,
+.notebook-body ol {
+  padding-left: 1.4rem;
+  margin: 0 0 1.1rem;
+}
+.notebook-body li::marker {
+  color: var(--color-talk);
+  font-family: var(--font-hand);
+}
+.notebook-body hr {
+  border: none;
+  border-top: 2px dashed var(--color-paper-line);
+  margin: 1.8rem 0;
+}
+
+/* 글 안에 들어가는 시뮬 자리(placeholder) — 내용은 나중에 Cowork에서 채움 */
+.sim-slot {
+  position: relative;
+  margin: 1.8rem 0 1.4rem;
+  border: 2px dashed var(--color-wood-plank);
+  border-radius: 10px;
+  background: #fffdf6;
+  padding: 22px 18px 18px;
+  text-align: center;
+  transform: rotate(-0.35deg);
+  box-shadow: 0 4px 14px rgba(90, 76, 50, 0.1);
+}
+/* 시뮬 쪽지를 붙여둔 테이프 */
+.sim-slot::before {
+  content: "";
+  position: absolute;
+  top: -12px;
+  left: 50%;
+  width: 76px;
+  height: 22px;
+  transform: translateX(-50%) rotate(-2deg);
+  background: rgba(233, 200, 118, 0.5);
+  border-left: 1px dashed rgba(160, 130, 60, 0.35);
+  border-right: 1px dashed rgba(160, 130, 60, 0.35);
+}
+.sim-slot .sim-title {
+  font-family: var(--font-hand);
+  font-weight: 700;
+  font-size: 1.05rem;
+  color: var(--color-talk);
+}
+.sim-slot .sim-note {
+  font-family: var(--font-hand);
+  color: var(--color-ink-soft);
+}

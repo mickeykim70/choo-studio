@@ -1,0 +1,262 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import { cabins, cabinMap } from '../../lib/cabins';
+import { gen, draw } from '../../lib/sketch';
+import { getCollection } from 'astro:content';
+
+export function getStaticPaths() {
+  return cabins.map((c) => ({ params: { cabin: c.key } }));
+}
+
+const key = Astro.params.cabin!;
+const meta = cabinMap[key];
+const notes = (await getCollection('notes', (n) => n.data.cabin === key)).sort(
+  (a, b) => b.data.date.valueOf() - a.data.date.valueOf(),
+);
+
+// 분필로 그린 칠판 안쪽 테두리 — 늘어나도 선 굵기 유지(vector-effect)
+const chalkBorder = gen.rectangle(14, 14, 772, 372, {
+  stroke: '#f5f0e6',
+  strokeWidth: 1.6,
+  roughness: 2.6,
+  bowing: 2,
+  seed: meta.seed + 80,
+});
+// 제목 분필 밑줄
+const chalkLine = gen.line(4, 7, 356, 10, {
+  stroke: '#f2d675',
+  strokeWidth: 2,
+  roughness: 2.4,
+  bowing: 2.5,
+  seed: meta.seed + 82,
+});
+
+function fmtDate(d: Date): string {
+  return `${d.getFullYear()}.${d.getMonth() + 1}.${d.getDate()}`;
+}
+---
+
+<BaseLayout title={`${meta.name} — 필기 목록 · choo-studio`}>
+  <main class="board-room">
+    <div class="board-wrap">
+      <a href={`/${key}`} class="hand out">‹ 오두막 나가기</a>
+      <div class="board-frame">
+        <div class="board">
+          <svg class="chalk-border" viewBox="0 0 800 400" preserveAspectRatio="none" aria-hidden="true">
+            <g set:html={draw(chalkBorder)} />
+          </svg>
+          <h1 class="hand title">{meta.name} — 필기 목록</h1>
+          <svg class="chalk-underline" viewBox="0 0 360 14" aria-hidden="true">
+            <g set:html={draw(chalkLine)} />
+          </svg>
+          <p class="hand sub">— 분필로 계속 늘어남</p>
+          {
+            notes.length > 0 ? (
+              <ul class="chalk-list">
+                {notes.map((n) => (
+                  <li>
+                    <a href={`/${key}/notes/${n.id}`} class={n.data.hasSim ? 'hand sim' : 'hand plain'}>
+                      <span class="note-line">
+                        <span class="arrow">→</span>
+                        {n.data.hasSim ? '✎ ' : '· '}
+                        {n.data.title}
+                        {n.data.hasSim && <span class="simtag"> — 시뮬 있음</span>}
+                        <span class="date">{fmtDate(n.data.date)}</span>
+                      </span>
+                      {n.data.summary && <span class="note-summary">{n.data.summary}</span>}
+                    </a>
+                  </li>
+                ))}
+              </ul>
+            ) : (
+              <p class="hand empty">아직 분필 자국이 없다. 곧 첫 필기가 올라온다.</p>
+            )
+          }
+        </div>
+        <div class="tray">
+          <span class="chalk-stick"></span>
+          <span class="chalk-stick red"></span>
+          <span class="chalk-stick yellow"></span>
+          <span class="eraser"></span>
+          <span class="hand tray-label">분필 &amp; 지우개</span>
+        </div>
+      </div>
+    </div>
+  </main>
+</BaseLayout>
+
+<style>
+  .board-room {
+    min-height: 100vh;
+    background:
+      radial-gradient(ellipse 80% 55% at 50% 0%, rgba(242, 193, 90, 0.08), transparent 65%),
+      var(--color-wood);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 2rem;
+  }
+  .board-wrap {
+    width: 100%;
+    max-width: 940px;
+  }
+  .out {
+    display: inline-block;
+    margin-bottom: 0.75rem;
+    color: #e9dcc7;
+    font-size: 1.05rem;
+    text-decoration: none;
+  }
+  .out:hover {
+    text-decoration: underline wavy;
+  }
+  .board-frame {
+    background: var(--color-board-frame);
+    border-radius: 8px;
+    padding: 12px;
+    transform: rotate(-0.35deg);
+    box-shadow: 0 14px 44px rgba(15, 10, 5, 0.45);
+  }
+  .board {
+    position: relative;
+    background:
+      radial-gradient(ellipse 150px 50px at 76% 84%, rgba(245, 240, 230, 0.055), transparent 70%),
+      radial-gradient(ellipse 110px 36px at 20% 62%, rgba(245, 240, 230, 0.04), transparent 70%),
+      radial-gradient(ellipse 90px 30px at 55% 30%, rgba(245, 240, 230, 0.035), transparent 70%),
+      var(--color-board);
+    border-radius: 4px;
+    padding: 34px 48px;
+    min-height: 360px;
+  }
+  .chalk-border {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+    opacity: 0.5;
+  }
+  .chalk-border :global(path) {
+    vector-effect: non-scaling-stroke;
+  }
+  .title {
+    color: var(--color-chalk);
+    font-size: 2rem;
+    font-weight: 700;
+    margin: 0;
+  }
+  .chalk-underline {
+    display: block;
+    width: 340px;
+    max-width: 85%;
+    height: 14px;
+    margin-top: -2px;
+    opacity: 0.85;
+  }
+  .sub {
+    color: var(--color-chalk-soft);
+    font-size: 1.05rem;
+    margin: 0.2rem 0 1.4rem;
+  }
+  .chalk-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+  }
+  .chalk-list li {
+    margin: 0.9rem 0;
+  }
+  .chalk-list a {
+    display: inline-block;
+    text-decoration: none;
+    color: var(--color-chalk);
+    transition: transform 0.2s ease;
+  }
+  .chalk-list a.sim {
+    color: var(--color-chalk-yellow);
+  }
+  .note-line {
+    display: block;
+    font-size: 1.5rem;
+  }
+  .arrow {
+    display: inline-block;
+    width: 0;
+    opacity: 0;
+    transform: translateX(-8px);
+    transition: opacity 0.2s ease, transform 0.2s ease;
+  }
+  .chalk-list a:hover {
+    transform: translateX(10px);
+  }
+  .chalk-list a:hover .arrow {
+    width: 1.4rem;
+    opacity: 0.9;
+    transform: translateX(0);
+  }
+  .chalk-list a:hover .note-line {
+    text-decoration: underline dashed;
+    text-underline-offset: 6px;
+  }
+  .simtag {
+    color: #8fae9c;
+    font-size: 1rem;
+  }
+  .date {
+    color: #7d9a8b;
+    font-size: 0.95rem;
+    margin-left: 0.7rem;
+  }
+  .note-summary {
+    display: block;
+    color: var(--color-chalk-soft);
+    font-size: 1.02rem;
+    opacity: 0.8;
+    margin-top: 0.05rem;
+    padding-left: 1.1rem;
+  }
+  .empty {
+    color: var(--color-chalk-soft);
+    font-size: 1.3rem;
+    margin-top: 2rem;
+  }
+  .tray {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 12px 6px 2px;
+  }
+  .chalk-stick {
+    width: 44px;
+    height: 7px;
+    border-radius: 4px;
+    background: #e9dcc7;
+    display: inline-block;
+    transform: rotate(-1.2deg);
+    box-shadow: 0 2px 3px rgba(0, 0, 0, 0.3);
+  }
+  .chalk-stick.red {
+    width: 30px;
+    background: #c94f3a;
+    transform: rotate(1.6deg);
+  }
+  .chalk-stick.yellow {
+    width: 22px;
+    background: #e5c96a;
+    transform: rotate(-2.4deg);
+  }
+  .eraser {
+    width: 52px;
+    height: 16px;
+    border-radius: 3px;
+    background: linear-gradient(#4a3b2c 0 55%, #8a7860 55% 100%);
+    display: inline-block;
+    margin-left: 6px;
+    transform: rotate(0.8deg);
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.35);
+  }
+  .tray-label {
+    color: #cdbba3;
+    font-size: 0.9rem;
+  }
+</style>

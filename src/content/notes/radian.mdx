@@ -1,0 +1,74 @@
+---
+title: 원에는 도(度)가 없다
+cabin: math
+date: 2026-07-05
+hasSim: true
+summary: 30도 60도는 초등학교에서 빌려온 눈금일 뿐. 원이 원래 쓰는 자는 반지름 하나다.
+---
+
+import RadianDef from '../../components/RadianDef.jsx';
+import RadianRatio from '../../components/RadianRatio.jsx';
+
+우리가 각을 30도, 60도, 90도로 부르는 건 초등학교에서 **각을 처음 익히기 위해 빌려온 편리한 눈금**이었다.
+한 바퀴를 360으로 쪼갠 그 360은 옛 바빌로니아가 60진법으로 정한 관습이지, 원이 스스로 정한 수가 아니다.
+
+## 원의 성질에는 '도'가 없다
+
+원의 정의는 딱 두 마디다. **중심**, 그리고 **중심에서 같은 거리에 있는 점들.** 그게 전부다.
+이 정의 어디를 뒤져도 "360"이라는 숫자는 없다. 원이 아는 것은 오직 **반지름**과, 그 반지름이 그리는 **호의 길이**뿐이다.
+
+<figure style="margin:1.4rem 0; text-align:center;">
+<svg viewBox="0 0 220 150" style="width:220px; max-width:100%; height:auto;" aria-label="원의 정의 — 중심과 같은 거리의 점들, 자는 반지름 하나">
+  <circle cx="110" cy="72" r="58" fill="none" stroke="#cdbfa0" stroke-width="1.6"/>
+  <circle cx="110" cy="72" r="2.6" fill="#3a352c"/>
+  <line x1="110" y1="72" x2="168" y2="72" stroke="#4a7a5a" stroke-width="2.4"/>
+  <text x="139" y="65" font-family="Gaegu, cursive" font-size="15" fill="#4a7a5a" text-anchor="middle">반지름</text>
+  <g fill="#c0562f">
+    <circle cx="110" cy="14" r="2.6"/><circle cx="151" cy="31" r="2.6"/>
+    <circle cx="52" cy="72" r="2.6"/><circle cx="75" cy="120" r="2.6"/>
+    <circle cx="150" cy="114" r="2.6"/>
+  </g>
+  <text x="110" y="146" font-family="Gaegu, cursive" font-size="13" fill="#7a7259" text-anchor="middle">여기 어디에도 360은 없다</text>
+</svg>
+</figure>
+
+## 억지로 끼우면 탈이 난다
+
+직각삼각형을 재거나 각도기로 잴 때는 도(度)도 아무 문제가 없다. 탈은 삼각함수를 **본격적으로 다룰 때 — 특히 미적분에서** 터진다.
+`sin`의 변화율(미분)이 딱 `cos`이 되는 것은 각을 **라디안**으로 잴 때뿐이다.
+도(度)로 재면 `sin(x°)`의 미분에 **0.01745…(= π/180)라는 군더더기 상수**가 달라붙는다. 작은 각에서 `sin x ≈ x`가 성립하는 것도 라디안에서만이다.
+**자연이 원래 1이라고 말하는 자리에, 도(度)를 쓰면 0.01745가 끼어든다.**
+
+## 라디안은 원에서 그냥 나온다
+
+그럼 원이 스스로 가진 유일한 자, **반지름**으로 호를 재보자. 반지름을 자 삼아 호가 몇 개 들어가는지 세는 것 — 그게 각의 크기다.
+
+<RadianDef client:visible />
+
+반지름 하나 길이만큼의 호가 만드는 각 = **1 라디안.** 계속 늘리면 여섯 개하고 조금 더, `6.28…`에서 딱 한 바퀴가 된다.
+여기엔 도(度)가 한 글자도 없다. 각의 크기는 그저 **"호가 반지름 몇 개인가"**일 뿐이다.
+
+## π조차 각도가 아니다
+
+같은 눈금 위에서 **반 바퀴**를 보자. 그 호의 길이가 바로 **π(≈3.14).**
+π는 "180도"가 아니라, 반지름 1인 원에서 **반원 호의 길이**다. 곧게 편 지름(반지름 2개)보다 살짝 긴, `3.14…` 반지름.
+
+<figure style="margin:1.4rem 0; text-align:center;">
+<svg viewBox="0 0 240 140" style="width:240px; max-width:100%; height:auto;" aria-label="반원 호의 길이가 π, 지름은 반지름 2개">
+  <path d="M 40 100 A 80 80 0 0 1 200 100" fill="none" stroke="#4a7a5a" stroke-width="2.6"/>
+  <line x1="40" y1="100" x2="200" y2="100" stroke="#7a7259" stroke-width="2" stroke-dasharray="5 4"/>
+  <circle cx="40" cy="100" r="3.2" fill="#c0562f"/>
+  <circle cx="200" cy="100" r="3.2" fill="#c0562f"/>
+  <text x="120" y="20" font-family="Gaegu, cursive" font-size="15" fill="#4a7a5a" text-anchor="middle">반원 호 = π (≈3.14 반지름)</text>
+  <text x="120" y="120" font-family="Gaegu, cursive" font-size="13" fill="#7a7259" text-anchor="middle">지름 = 반지름 2개</text>
+</svg>
+</figure>
+
+라디안이 각도라기보다 **비율**인 이유가 여기 있다. `각 = 호 ÷ 반지름` — 길이를 길이로 나눴으니 단위가 없다.
+그래서 원이 커지든 작아지든, 각만 같으면 이 값은 꿈쩍도 안 한다. 초록 원을 마음껏 키우고 줄여보자.
+
+<RadianRatio client:visible />
+
+실제 호 길이는 원 크기를 따라 출렁이지만, "반지름 몇 개"는 변하지 않는다. 호와 반지름이 **함께** 커지니까.
+
+*라디안은 각을 재는 여러 방법 중 하나가 아니라, 원이 쓰는 모국어다. 도(度)는 초등학교 교실에서 잠깐 빌려온 손님일 뿐.*

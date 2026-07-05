@@ -1,0 +1,157 @@
+---
+import { gen, draw } from '../lib/sketch';
+
+interface Props {
+  x: number;
+  y: number;
+  color: string;
+  roofFill: string;
+  label: string;
+  seed: number;
+  href: string;
+  soon?: boolean;
+  icon?: string;
+}
+const { x, y, color, roofFill, label, seed, href, soon = false, icon } = Astro.props;
+
+const W = 120;
+const H = 86;
+const ROOF = 40;
+
+// 굴뚝 — 지붕보다 먼저 그려서 아랫단이 지붕에 덮이게
+const chimney = gen.rectangle(86, 2, 14, 22, {
+  stroke: color,
+  strokeWidth: 2,
+  roughness: 1.4,
+  seed: seed + 5,
+  fill: roofFill,
+  fillStyle: 'solid',
+});
+const roof = gen.polygon(
+  [
+    [-12, ROOF + 2],
+    [W / 2, 0],
+    [W + 12, ROOF + 2],
+  ],
+  { stroke: color, strokeWidth: 2.4, roughness: 1.6, bowing: 1, seed: seed + 1, fill: roofFill, fillStyle: 'solid' },
+);
+const body = gen.rectangle(0, ROOF, W, H, {
+  stroke: color,
+  strokeWidth: 2.4,
+  roughness: 1.4,
+  bowing: 1.3,
+  seed,
+  fill: '#fbf7ec',
+  fillStyle: 'solid',
+});
+const door = gen.rectangle(W / 2 - 16, ROOF + H - 34, 32, 34, {
+  stroke: color,
+  strokeWidth: 2,
+  roughness: 1.3,
+  seed: seed + 2,
+  fill: roofFill,
+  fillStyle: 'solid',
+});
+// 창문 — 십자 창살, 불 켜진 느낌의 미색
+const winFill = soon ? '#f1ece0' : '#fdf3cf';
+const win = gen.rectangle(14, ROOF + 18, 28, 24, {
+  stroke: color,
+  strokeWidth: 1.8,
+  roughness: 1.3,
+  seed: seed + 3,
+  fill: winFill,
+  fillStyle: 'solid',
+});
+const winV = gen.line(28, ROOF + 18, 28, ROOF + 42, { stroke: color, strokeWidth: 1.4, roughness: 1.2, seed: seed + 4 });
+const winH = gen.line(14, ROOF + 30, 42, ROOF + 30, { stroke: color, strokeWidth: 1.4, roughness: 1.2, seed: seed + 6 });
+
+const inner = draw(chimney) + draw(roof) + draw(body) + draw(door) + draw(win) + draw(winV) + draw(winH);
+const labelY = ROOF + H + 26;
+---
+
+<a href={href}>
+  <g transform={`translate(${x},${y})`} class={soon ? 'cabin soon' : 'cabin'}>
+    <g class="cabin-lift">
+      {
+        !soon && (
+          <g class="smoke" fill="#cfc8b8">
+            <circle class="puff p1" cx="93" cy="-4" r="4" />
+            <circle class="puff p2" cx="95" cy="-4" r="3.2" />
+            <circle class="puff p3" cx="92" cy="-4" r="2.6" />
+          </g>
+        )
+      }
+      <g set:html={inner} />
+      <circle cx={W / 2 + 9} cy={ROOF + H - 16} r="2.2" fill={color} />
+      {
+        icon && (
+          <text x={W / 2 + 14} y={ROOF + 30} text-anchor="middle" class="hand" fill={color} font-size="20">
+            {icon}
+          </text>
+        )
+      }
+    </g>
+    <text x={W / 2} y={labelY} text-anchor="middle" class="hand" fill={color} font-size="18" font-weight="700">
+      {label}
+    </text>
+    {
+      soon && (
+        <text x={W / 2} y={labelY + 20} text-anchor="middle" class="hand" fill="#b0a074" font-size="13">
+          ( 아직 짓는 중 )
+        </text>
+      )
+    }
+  </g>
+</a>
+
+<style>
+  .cabin {
+    cursor: pointer;
+  }
+  .cabin-lift {
+    transition: transform 0.28s ease;
+    transform-box: fill-box;
+    transform-origin: center bottom;
+  }
+  a:hover .cabin-lift {
+    transform: translateY(-4px) rotate(-1deg);
+  }
+  .cabin.soon {
+    opacity: 0.55;
+  }
+  a:hover .cabin.soon {
+    opacity: 0.85;
+  }
+
+  /* 굴뚝 연기 — 준비된 오두막만, 몽글몽글 */
+  .puff {
+    opacity: 0;
+    transform-box: fill-box;
+    transform-origin: center;
+    animation: puff-rise 4.5s ease-out infinite;
+  }
+  .puff.p2 {
+    animation-delay: 1.5s;
+  }
+  .puff.p3 {
+    animation-delay: 3s;
+  }
+  @keyframes puff-rise {
+    0% {
+      opacity: 0;
+      transform: translate(0, 0) scale(0.5);
+    }
+    15% {
+      opacity: 0.7;
+    }
+    100% {
+      opacity: 0;
+      transform: translate(7px, -30px) scale(1.5);
+    }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .puff {
+      animation: none;
+    }
+  }
+</style>
