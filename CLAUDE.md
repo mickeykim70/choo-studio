@@ -43,11 +43,15 @@
   **A/CNAME 레코드 없음 (백지 상태)**.
 - Zone ID: `99ab1235fd1fc0ad54c6397c7572a713` (status: active)
 - Account: Mickeykim70@gmail.com / account_id `b2d0eff579f29441d54ad00036bdb2be`
-- **Cloudflare API MCP 연결 완료** — `cloudflare-api` 서버(`https://mcp.cloudflare.com/mcp`),
-  `search`/`execute` 도구로 DNS·Zero Trust Tunnel 포함 Cloudflare API 전체 접근 가능.
-  → DNS 레코드 추가, Tunnel Public Hostname 등록 등을 이 MCP로 바로 실행 가능.
-- 계정에 빈 Worker `choo-studio` 존재(생성 2026-03-25, 코드 없음) — 예전에 만들어둔 것.
-  당장 지울 필요 없고 나중에 정리.
+- **Cloudflare API MCP**: 세션마다 연결되는 서버가 다를 수 있음(권한도 제각각 — 읽기 전용인 경우도,
+  DNS·Workers 쓰기까지 되는 경우도 있었음). 세션 시작 시 실제 연결된 도구로 다시 확인할 것.
+- 계정에 빈 Worker `choo-studio` 존재(생성 2026-03-25) — `choo.studio`(같은 계정 소유의 별도 도메인,
+  .studio TLD) 커스텀 도메인이 붙어있음. choo-studio.uk와는 무관, 당장 안 건드림.
+- **choo-studio.uk 배포는 GitHub + Cloudflare Workers(정적 에셋) 방식으로 완료(2026-07-05)**:
+  레포 `github.com/mickeykim70/choo-studio`(private, GitHub Actions Git-connected 빌드) →
+  Worker `choo-studio-uk`(Workers Static Assets, `wrangler.jsonc`의 `assets.directory: "./dist"`로
+  SSR 어댑터 없이 순수 정적 서빙) → 커스텀 도메인 `choo-studio.uk` 연결 완료.
+  NAS 정적 호스팅(5번 원안)은 보류 — 필요해지면 별도로 전환.
 
 ## 4. NAS 인프라 (choo-nas, Synology DS218+)
 - SSH 패스워드리스: `ssh mickey@choo-nas`
@@ -108,7 +112,10 @@
   은은한 CSS 애니메이션: 굴뚝 연기(ready 오두막만)·낙엽·램프 일렁임·고양이 추 꼬리/눈 깜빡임 (`prefers-reduced-motion` 대응).
 - **시뮬**: **첫 진짜 시뮬 완료(2026-07-05)** — `math` 첫 글 "원에는 도(度)가 없다"(`src/content/notes/radian.mdx`)에 React island 2개: `RadianDef.jsx`(반지름을 원둘레에 감아 1라디안=반지름·2π=6.28 세기), `RadianRatio.jsx`(단위원 vs 크기 바꾼 원, 호÷반지름=라디안 불변). 톤=절충(도형 정확+Gaegu 손글씨 라벨). `.sim-slot` placeholder는 `eyes` 난시 글에 아직 남아있음.
 - **검증 메모**: Cowork(Linux 샌드박스)에선 node_modules가 Windows용이라 `npm run build` 불가 → 대신 esbuild 문법검증+극단값 NaN 테스트로 확인. **실제 빌드·미리보기는 로컬 i5에서** `npm run dev`(:4321) → `/math/notes/radian`. (2026-07-05 npm install이 package-lock.json에 크로스플랫폼 rolldown optional 항목 추가함 — 무해)
-- **남은 것**: ①로컬에서 첫 글 육안 확인 ②배포(로컬 build→NAS 정적→cloudflared Public Hostname).
+- **배포 완료(2026-07-05)**: `https://choo-studio.uk/math/notes/radian` 실제 접속 확인 완료(본문·시뮬 2개
+  정상, 콘솔 에러 없음). 경로는 3번 참조(GitHub → Cloudflare Workers 정적 에셋). 글 추가 후 재배포는
+  `git push`만 하면 Cloudflare가 자동으로 재빌드·재배포(Git-connected).
+- **남은 것**: 없음(1단계 뼈대+첫 글 배포까지 완료). 다음은 새 글 추가나 다른 오두막 콘텐츠 작업.
 
 ## 9. 도구 호출 규칙 — Wolfram (2026-07-04 확정)
 수학·물리·안과학·광학 콘텐츠에 계산이 들어갈 때 지키는 규칙. 연결된 울프람 도구는 성격이 다른 2종.
