@@ -105,6 +105,11 @@
 ## 8. 구현 현황 (2026-07-03 · 1단계 뼈대 완료)
 > 실행법·구조·콘텐츠 추가법 상세는 **`README.md`**. 여기선 요약만.
 - **역할 분담**: 클로드코드(여기) = **뼈대·구조·컴포넌트·시뮬**. 글 등 **내용은 Cowork에서** 채우고, 필요한 건 고쳐감.
+- **Cowork → 배포 흐름(2026-07-06 확정)**: Cowork에서 본문·컴포넌트·설정 등 **자유롭게 작업(커밋까지)해도 됨**.
+  다만 Cowork 샌드박스엔 이 레포의 GitHub SSH 키가 없어서 **push는 안 됨** — Cowork가 만든 변경사항은
+  이 로컬 작업폴더(D:\CLAUDE\CHOO-STUDIO)에 그대로 반영되어 있으니, 로컬 세션에서 `git status`로
+  확인 → 빌드+육안 검증 → 커밋 → `git push`까지 마무리한다. push하면 Cloudflare가 Git-connected로
+  자동 재빌드·배포(3번 참조).
 - **스택 실물**: Astro 7 + React 19 + MDX + Tailwind v4 + Rough.js + @fontsource/gaegu. `npm run dev`(:4321)/`build`/`preview`.
 - **라우트**: `/`(숲) → `/[cabin]` → `/[cabin]/board`(칠판=글목록) → `/[cabin]/notes/[slug]`(공책=MDX). cabin = `eyes|math|ai|talk`. **URL만 영문**(한글 경로는 %인코딩 깨짐), 화면은 전부 한글.
 - **오두막 4채**: `src/lib/cabins.ts` 한 곳에서 정의(이름·색·소개·`ready`). `eyes`·`math` 각 글 1편(둘 다 `ready:true`), `ai`·`talk`는 "준비중". **오두막 추가=cabins.ts 한 줄, 글 추가=`src/content/notes/*.mdx` 한 장**(칠판 자동 등록).
