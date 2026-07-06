@@ -112,15 +112,14 @@
   자동 재빌드·배포(3번 참조).
 - **스택 실물**: Astro 7 + React 19 + MDX + Tailwind v4 + Rough.js + @fontsource/gaegu. `npm run dev`(:4321)/`build`/`preview`.
 - **라우트**: `/`(숲) → `/[cabin]` → `/[cabin]/board`(칠판=글목록) → `/[cabin]/notes/[slug]`(공책=MDX). cabin = `eyes|math|ai|talk`. **URL만 영문**(한글 경로는 %인코딩 깨짐), 화면은 전부 한글.
-- **오두막 4채**: `src/lib/cabins.ts` 한 곳에서 정의(이름·색·소개·`ready`). `eyes`·`math` 각 글 1편(둘 다 `ready:true`), `ai`·`talk`는 "준비중". **오두막 추가=cabins.ts 한 줄, 글 추가=`src/content/notes/*.mdx` 한 장**(칠판 자동 등록).
+- **오두막 4채**: `src/lib/cabins.ts` 한 곳에서 정의(이름·색·소개·`ready`). `eyes` 1편·`math` 3편(둘 다 `ready:true`), `ai`·`talk`는 "준비중". **오두막 추가=cabins.ts 한 줄, 글 추가=`src/content/notes/*.mdx` 한 장**(칠판 자동 등록).
 - **손그림**: `src/lib/sketch.ts`(Rough.js, 빌드타임 생성·seed 고정). **전 화면 적용 완료**(홈 숲 디테일·오두막 널빤지/옹이·칠판 분필 테두리·공책 색연필 밑줄).
   은은한 CSS 애니메이션: 굴뚝 연기(ready 오두막만)·낙엽·램프 일렁임·고양이 추 꼬리/눈 깜빡임 (`prefers-reduced-motion` 대응).
 - **시뮬**: **첫 진짜 시뮬 완료(2026-07-05)** — `math` 첫 글 "원에는 도(度)가 없다"(`src/content/notes/radian.mdx`)에 React island 2개: `RadianDef.jsx`(반지름을 원둘레에 감아 1라디안=반지름·2π=6.28 세기), `RadianRatio.jsx`(단위원 vs 크기 바꾼 원, 호÷반지름=라디안 불변). 톤=절충(도형 정확+Gaegu 손글씨 라벨). `.sim-slot` placeholder는 `eyes` 난시 글에 아직 남아있음.
-- **검증 메모**: Cowork(Linux 샌드박스)에선 node_modules가 Windows용이라 `npm run build` 불가 → 대신 esbuild 문법검증+극단값 NaN 테스트로 확인. **실제 빌드·미리보기는 로컬 i5에서** `npm run dev`(:4321) → `/math/notes/radian`. (2026-07-05 npm install이 package-lock.json에 크로스플랫폼 rolldown optional 항목 추가함 — 무해)
-- **배포 완료(2026-07-05)**: `https://choo-studio.uk/math/notes/radian` 실제 접속 확인 완료(본문·시뮬 2개
-  정상, 콘솔 에러 없음). 경로는 3번 참조(GitHub → Cloudflare Workers 정적 에셋). 글 추가 후 재배포는
-  `git push`만 하면 Cloudflare가 자동으로 재빌드·재배포(Git-connected).
-- **남은 것**: 없음(1단계 뼈대+첫 글 배포까지 완료). 다음은 새 글 추가나 다른 오두막 콘텐츠 작업.
+  `math` 둘째 글 "sin과 cos는 그림자다"(`shadow.mdx`)에 `ShadowDef.jsx`(원 위 점의 가로·세로 그림자=cos·sin). `math` 셋째 글 "원을 풀면 파동이 된다"(`shadow-wave.mdx`)에 `ShadowWave.jsx`(도는 점의 세로 그림자를 시간축에 눕혀 사인 곡선을 실시간 작도, 재생/속도/직접돌리기).
+- **검증 메모**: Cowork(Linux 샌드박스)에선 node_modules가 Windows용이라 `npm run build` 불가 → 대신 esbuild 문법검증+극단값 NaN 테스트로 확인. **실제 빌드·미리보기는 로컬 i5에서** `npm run dev`(:4321) → 해당 글 경로. (2026-07-05 npm install이 package-lock.json에 크로스플랫폼 rolldown optional 항목 추가함 — 무해)
+- **배포 완료(최신 2026-07-06)**: `https://choo-studio.uk/math/notes/{radian,shadow,shadow-wave}` 모두 실제 접속 확인 완료(본문·시뮬 정상, 콘솔 에러 없음). 경로는 3번 참조(GitHub → Cloudflare Workers 정적 에셋). 글 추가 후 재배포는 `git push`만 하면 Cloudflare가 자동으로 재빌드·재배포(Git-connected) — Cowork 커밋분은 8번의 Cowork→배포 흐름대로 로컬에서 push까지 마무리.
+- **남은 것**: 없음(1단계 뼈대+math 3편 배포까지 완료). 다음은 새 글 추가나 다른 오두막 콘텐츠 작업.
 
 ## 9. 도구 호출 규칙 — Wolfram (2026-07-04 확정)
 수학·물리·안과학·광학 콘텐츠에 계산이 들어갈 때 지키는 규칙. 연결된 울프람 도구는 성격이 다른 2종.
