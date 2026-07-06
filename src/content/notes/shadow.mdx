@@ -1,0 +1,62 @@
+---
+title: sin과 cos는 그림자다
+cabin: math
+date: 2026-07-06
+hasSim: true
+summary: SOH-CAH-TOA를 외우지 말자. 빗변을 1로 세우면 삼각형의 비율이 그대로 그림자가 된다. (cos θ, sin θ)가 헷갈릴 수 없는 이유.
+---
+
+import ShadowDef from '../../components/ShadowDef.jsx';
+
+$\sin$을 "사인은 빗변분의 대변"이라고 주문처럼 외운 기억이 있다. SOH-CAH-TOA.
+외우면 시험은 넘어가지만, 원 위의 점 $(\cos\theta,\ \sin\theta)$를 만나는 순간 다시 헷갈린다. **어느 게 x고 어느 게 y였더라?**
+요즘 수학이 자꾸 암기과목이 되는 자리가 딱 여기다. 그런데 이건 외울 게 아니라 **그림자를 보면 그냥 보이는** 이야기다.
+
+## 그 전에 — sin, cos도 결국 비율이다
+
+라디안은 **호 : 반지름**, 파이는 **둘레 : 지름**이었다. 둘 다 길이 대 길이의 **비율**. 삼각함수도 같은 종족이다.
+
+<figure style="margin:1.4rem 0; text-align:center;">
+<svg viewBox="0 0 280 180" style="width:280px; max-width:100%; height:auto;" aria-label="직각삼각형에서 sin은 대변÷빗변, cos는 밑변÷빗변">
+  <line x1="34" y1="146" x2="210" y2="146" stroke="#c0562f" stroke-width="2.6"/>
+  <line x1="210" y1="146" x2="210" y2="58" stroke="#4a7a5a" stroke-width="2.6"/>
+  <line x1="34" y1="146" x2="210" y2="58" stroke="#3a352c" stroke-width="2.2"/>
+  <path d="M 200 146 L 200 136 L 210 136" fill="none" stroke="#7a7259" stroke-width="1.3"/>
+  <path d="M 60 146 A 26 26 0 0 0 55 130" fill="none" stroke="#7a7259" stroke-width="1.3"/>
+  <text x="44" y="140" font-family="Gaegu, cursive" font-size="14" fill="#3a352c">θ</text>
+  <text x="120" y="130" font-family="Gaegu, cursive" font-size="14" fill="#c0562f" text-anchor="middle">밑변</text>
+  <text x="228" y="106" font-family="Gaegu, cursive" font-size="14" fill="#4a7a5a" text-anchor="middle">대변</text>
+  <text x="105" y="92" font-family="Gaegu, cursive" font-size="14" fill="#3a352c" text-anchor="middle" transform="rotate(-26 105 92)">빗변</text>
+</svg>
+<figcaption style="font-family:Gaegu,cursive; font-size:1.05rem; color:#7a7259; margin-top:8px; display:flex; align-items:center; justify-content:center; gap:8px; flex-wrap:wrap;"><span>sin θ =</span><span style="display:inline-flex; flex-direction:column; align-items:center; line-height:1.05;"><span>대변</span><span style="border-top:1.6px solid #7a7259; padding:1px 5px 0;">빗변</span></span><span>,&nbsp;&nbsp;cos θ =</span><span style="display:inline-flex; flex-direction:column; align-items:center; line-height:1.05;"><span>밑변</span><span style="border-top:1.6px solid #7a7259; padding:1px 5px 0;">빗변</span></span><span>— 길이를 길이로 나눈 값이라 단위가 없다</span></figcaption>
+</figure>
+
+$\sin\theta$ = 대변 ÷ 빗변, $\cos\theta$ = 밑변 ÷ 빗변. 여기까진 다들 아는 이야기다. 문제는 이 **분수**가 원 위의 점 좌표로 바뀌는 순간 연결이 끊긴다는 것.
+
+## 빗변을 1로 세우면 — 비율이 그림자가 된다
+
+$\sin\theta$ = 대변 ÷ 빗변에서 **빗변을 반지름 삼아 길이 1로** 세워보자. 그러면 분모가 1이라 사라지고 — **$\sin\theta$ = 대변 ÷ 1 = 대변**, 곧 **높이 그 자체.**
+
+분수였던 것이 **길이 하나**로 납작해진다. 이 높이가 바로 점을 옆에서 비췄을 때 벽에 지는 그림자다.
+같은 식으로 $\cos\theta$는 위에서 비췄을 때 바닥에 지는 그림자 — 가로 위치. 점을 돌려보자.
+
+<ShadowDef client:visible />
+
+- **위에서 온 빛**(햇빛처럼 평행)이 점을 바닥(x축)에 떨군 그림자 = **$\cos\theta$**. 가로 위치.
+- **옆에서 온 빛**이 점을 벽(y축)에 떨군 그림자 = **$\sin\theta$**. 높이.
+
+그래서 원 위의 점은 언제나 (가로 그림자, 세로 그림자) = $(\cos\theta,\ \sin\theta)$다. **더 이상 외울 게 없다.** x는 바닥 그림자, y는 벽 그림자 — 빛을 어디서 쏘는지만 기억하면 된다.
+2사분면으로 넘겨보면 바닥 그림자가 왼쪽으로 가며 $\cos$가 음수가 되는 것도, "그림자가 원점 왼쪽에 졌다"로 그냥 보인다.
+
+> 작은 주의: 그림자가 좌표와 **정확히** 같으려면 빛이 **평행**이어야 한다. 전구처럼 한 점에서 퍼지는 빛이면 그림자가 좌표와 어긋난다. 그래서 위 그림의 빛은 전부 나란한 화살표 — 먼 곳의 햇빛이다.
+
+## 왜 하필 반지름을 1로?
+
+"빗변을 1로 세운다"는 건 우리가 임의로 고른 것이다. 사실 반지름이 얼마든 상관없다 — 삼각비는 **비율**이라 원이 커지든 작아지든 값이 안 변하니까(그림자와 반지름이 함께 커진다). 이왕 크기와 무관하다면 **제일 깔끔한 반지름 1**을 고르는 게 이득이다. 그러면 분모가 사라져 나눗셈이 필요 없고, **그림자 길이가 곧 sin·cos 값**이 된다. 단위원은 약속이 아니라 가장 편한 눈금을 고른 결과다.
+
+## 남은 이야기 — 그림자를 시간 위에 늘어놓으면
+
+점이 원을 빙글빙글 돌 때 벽에 진 그림자(높이)를 시간축으로 쭉 늘어놓으면, 그 궤적이 바로 **사인 곡선**이 된다. 원운동과 파동이 왜 같은 놈인지가 그림자 하나로 이어진다.
+그리고 방금 미뤄둔 질문 — **반지름을 1이 아니라 더 키우면?** 그림자도 그만큼 커지니, 사인 곡선의 **높이(진폭)가** 덩달아 커진다. 원의 반지름이 곧 파동의 진폭인 셈이다. 그 이야기는 그 자체로 한 편 값어치가 있어서 — *다음 공책에서.*
+
+*삼각함수는 외우는 공식이 아니라, 원 위의 점이 벽과 바닥에 떨구는 두 그림자다.*

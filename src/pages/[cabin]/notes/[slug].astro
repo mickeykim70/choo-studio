@@ -1,7 +1,6 @@
 ---
 import BaseLayout from '../../../layouts/BaseLayout.astro';
 import { cabinMap } from '../../../lib/cabins';
-import { gen, draw } from '../../../lib/sketch';
 import { getCollection, render } from 'astro:content';
 
 export async function getStaticPaths() {
@@ -17,38 +16,46 @@ const key = Astro.params.cabin!;
 const meta = cabinMap[key];
 const { Content } = await render(note);
 
-// 제목 밑줄 — 오두막 색 색연필 한 획
-const titleW = Math.min(560, note.data.title.length * 30 + 40);
-const titleLine = gen.line(3, 7, titleW, 10, {
-  stroke: meta.color,
-  strokeWidth: 2.6,
-  roughness: 2.4,
-  bowing: 2.5,
-  seed: meta.seed + 90,
-});
+// 같은 오두막의 다른 필기 (브런치 '추천글'처럼 아래에)
+const all = await getCollection('notes');
+const others = all
+  .filter((n) => n.data.cabin === key && n.id !== note.id)
+  .sort((a, b) => b.data.date.getTime() - a.data.date.getTime())
+  .slice(0, 5);
 ---
 
 <BaseLayout title={`${note.data.title} · choo-studio`}>
-  <main class="notebook-room">
-    <div class="page">
-      <span class="tape tape-left" aria-hidden="true"></span>
-      <span class="tape tape-right" aria-hidden="true"></span>
-      <a href={`/${key}/board`} class="hand back">‹ 칠판으로</a>
-      <h1 class="hand paper-title" style={`color: ${meta.color}`}>{note.data.title}</h1>
-      <svg class="title-underline" viewBox={`0 0 ${titleW + 6} 14`} style={`width: ${titleW + 6}px`} aria-hidden="true">
-        <g set:html={draw(titleLine)} />
-      </svg>
-      <p class="hand paper-meta">
+  <main class="read-room">
+    <article class="read" style={`--accent: ${meta.color}`}>
+      <a href={`/${key}/board`} class="back" style={`color: ${meta.color}`}>‹ 칠판으로</a>
+      <h1 class="read-title">{note.data.title}</h1>
+      <p class="read-meta">
         {note.data.date.toLocaleDateString('ko-KR')} · {meta.name}
       </p>
-      <article class="notebook-body">
+      <div class="notebook-body">
         <Content />
-      </article>
+      </div>
 
-      <!-- 고양이 추가 지나간 자국 -->
+      {others.length > 0 && (
+        <nav class="more">
+          <p class="more-label">이 오두막의 다른 필기</p>
+          <ul>
+            {others.map((n) => (
+              <li>
+                <a href={`/${key}/notes/${n.id}`}>
+                  <span class="more-title">{n.data.title}</span>
+                  <span class="more-date">{n.data.date.toLocaleDateString('ko-KR')}</span>
+                </a>
+              </li>
+            ))}
+          </ul>
+        </nav>
+      )}
+
+      <!-- 고양이 추가 지나간 자국 (놀이터의 흔적 하나만 조용히) -->
       <div class="paw-trail" aria-hidden="true">
         <svg viewBox="0 0 120 46" class="paws">
-          <g fill="#b9a98a">
+          <g fill="#c8bda6">
             <g transform="translate(8,26) rotate(-18)">
               <ellipse cx="0" cy="4" rx="4.4" ry="3.6" />
               <circle cx="-4.5" cy="-2.5" r="1.7" />
@@ -74,71 +81,89 @@ const titleLine = gen.line(3, 7, titleW, 10, {
         </svg>
         <span class="hand paw-note">… 추 지나감</span>
       </div>
-    </div>
+    </article>
   </main>
 </BaseLayout>
 
 <style>
-  .notebook-room {
+  .read-room {
     min-height: 100vh;
-    background: var(--color-paper);
-    padding: 3rem 2rem;
+    background: #efe9dc;
+    padding: 3.5rem 1.5rem 4.5rem;
   }
-  .page {
-    position: relative;
-    max-width: 760px;
+  .read {
+    max-width: 788px;
     margin: 0 auto;
-    background: #fbf8ee;
-    background-image: repeating-linear-gradient(#fbf8ee 0 31px, var(--color-paper-line) 31px 32px);
-    border-left: 26px solid var(--color-paper);
-    box-shadow:
-      inset 30px 0 0 -28px #d98b8b,
-      0 12px 34px rgba(90, 76, 50, 0.16);
-    padding: 30px 34px 36px 46px;
-  }
-  /* 마스킹테이프 */
-  .tape {
-    position: absolute;
-    top: -11px;
-    width: 92px;
-    height: 26px;
-    background: rgba(233, 200, 118, 0.5);
-    border-left: 1px dashed rgba(160, 130, 60, 0.35);
-    border-right: 1px dashed rgba(160, 130, 60, 0.35);
-    box-shadow: 0 1px 3px rgba(90, 76, 50, 0.15);
-  }
-  .tape-left {
-    left: 34px;
-    transform: rotate(-5deg);
-  }
-  .tape-right {
-    right: 34px;
-    transform: rotate(4deg);
+    background: #fdfcf8;
+    border: 1px solid rgba(120, 100, 60, 0.07);
+    border-radius: 14px;
+    box-shadow: 0 8px 30px rgba(90, 76, 50, 0.11);
+    padding: 42px 44px 34px;
   }
   .back {
-    color: #b0a074;
+    display: inline-block;
     text-decoration: none;
-    font-size: 1rem;
+    font-size: 0.95rem;
+    font-weight: 500;
+    margin-bottom: 1.6rem;
+    opacity: 0.92;
   }
   .back:hover {
-    color: #9e4525;
-    text-decoration: underline wavy;
+    text-decoration: underline;
   }
-  .paper-title {
-    font-size: 2rem;
+  .read-title {
+    font-size: 2.1rem;
     font-weight: 700;
-    margin: 0.3rem 0 0;
+    line-height: 1.32;
+    letter-spacing: -0.01em;
+    color: #2e2a24;
+    margin: 0 0 0.5rem;
   }
-  .title-underline {
-    display: block;
-    height: 14px;
-    max-width: 100%;
-    margin: -3px 0 0;
-    opacity: 0.75;
+  .read-meta {
+    color: #9a927e;
+    font-size: 0.9rem;
+    margin: 0 0 2.2rem;
   }
-  .paper-meta {
-    color: #8a8266;
-    margin: 0.15rem 0 1.2rem;
+  /* 이 오두막의 다른 필기 */
+  .more {
+    margin-top: 3rem;
+    padding-top: 1.6rem;
+    border-top: 1px solid #e6ddc9;
+  }
+  .more-label {
+    font-size: 0.85rem;
+    font-weight: 700;
+    letter-spacing: 0.02em;
+    color: #9a927e;
+    margin: 0 0 0.6rem;
+  }
+  .more ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+  }
+  .more a {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    gap: 14px;
+    text-decoration: none;
+    color: #37322a;
+    font-size: 1rem;
+    padding: 0.6rem 0;
+    border-bottom: 1px solid #f1ead8;
+  }
+  .more li:last-child a {
+    border-bottom: none;
+  }
+  .more a:hover .more-title {
+    color: var(--accent);
+    text-decoration: underline;
+  }
+  .more-date {
+    color: #b3a98a;
+    font-size: 0.82rem;
+    white-space: nowrap;
   }
   .paw-trail {
     display: flex;
@@ -146,14 +171,16 @@ const titleLine = gen.line(3, 7, titleW, 10, {
     justify-content: flex-end;
     gap: 6px;
     margin-top: 2.4rem;
-    opacity: 0.55;
+    padding-top: 1.4rem;
+    border-top: 1px solid #f0ead9;
+    opacity: 0.5;
   }
   .paws {
-    width: 110px;
-    height: 42px;
+    width: 96px;
+    height: 38px;
   }
   .paw-note {
     color: #a89a78;
-    font-size: 0.95rem;
+    font-size: 0.9rem;
   }
 </style>

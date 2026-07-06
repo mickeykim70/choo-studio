@@ -48,38 +48,40 @@ a {
   color: #3a352c;
 }
 
-/* 공책 본문 — 인쇄체 산세리프 */
+/* 글 본문 — 줄 없는 조용한 읽기 + 손그림 개성(제목·강조·마커). 밖은 놀이터, 안은 조용한 읽기 */
 .notebook-body {
-  font-size: 1rem;
-  line-height: 2.05;
-  color: var(--color-ink);
+  font-size: 0.9375rem;
+  line-height: 2;
+  color: #37322a;
 }
 .notebook-body p {
-  margin: 0 0 1.1rem;
+  margin: 0 0 1.4rem;
 }
 .notebook-body h2 {
-  font-family: var(--font-hand);
-  color: var(--color-eyes);
-  font-size: 1.5rem;
-  margin: 1.6rem 0 0.6rem;
+  font-size: 1.4rem;
+  font-weight: 700;
+  letter-spacing: -0.01em;
+  color: var(--accent, var(--color-math));
+  margin: 2.4rem 0 0.8rem;
 }
 .notebook-body h3 {
-  font-family: var(--font-hand);
-  color: var(--color-ink-soft);
-  font-size: 1.25rem;
-  margin: 1.3rem 0 0.5rem;
+  font-size: 1.15rem;
+  font-weight: 700;
+  color: #4a463d;
+  margin: 1.8rem 0 0.5rem;
 }
 .notebook-body code {
-  font-family: var(--font-hand);
-  background: #eef3ee;
-  color: var(--color-math);
-  padding: 1px 8px;
+  font-family: "SFMono-Regular", ui-monospace, Menlo, Consolas, monospace;
+  background: #f0ece2;
+  color: #4a463d;
+  font-size: 0.92em;
+  padding: 1px 6px;
   border-radius: 4px;
 }
-/* 강조 = 노란 형광펜 */
 .notebook-body strong {
   font-weight: 700;
-  background: linear-gradient(transparent 58%, rgba(242, 214, 117, 0.75) 58%, rgba(242, 214, 117, 0.75) 92%, transparent 92%);
+  color: #2e2a24;
+  background: linear-gradient(transparent 58%, rgba(242, 214, 117, 0.7) 58%, rgba(242, 214, 117, 0.7) 92%, transparent 92%);
   padding: 0 2px;
 }
 .notebook-body em {
@@ -88,24 +90,33 @@ a {
   color: var(--color-ink-soft);
 }
 .notebook-body blockquote {
-  margin: 1.2rem 0;
-  padding: 0.2rem 0 0.2rem 1rem;
-  border-left: 3px solid var(--color-talk);
-  color: var(--color-ink-soft);
+  margin: 1.6rem 0;
+  padding: 0.2rem 0 0.2rem 1.1rem;
+  border-left: 3px solid #e0d8c6;
+  color: #8a8266;
 }
 .notebook-body ul,
 .notebook-body ol {
   padding-left: 1.4rem;
-  margin: 0 0 1.1rem;
+  margin: 0 0 1.4rem;
+}
+.notebook-body li {
+  margin: 0 0 0.4rem;
 }
 .notebook-body li::marker {
-  color: var(--color-talk);
-  font-family: var(--font-hand);
+  color: var(--accent, var(--color-talk));
 }
 .notebook-body hr {
   border: none;
-  border-top: 2px dashed var(--color-paper-line);
-  margin: 1.8rem 0;
+  border-top: 1px solid #ece7db;
+  margin: 2.2rem 0;
+}
+/* KaTeX — 기본 1.21배 확대를 본문 크기에 맞춰 제거(들쭉날쭉 방지). 수식엔 기호만, 한글은 본문 폰트. */
+.notebook-body .katex {
+  font-size: 1em;
+}
+.notebook-body .katex-display {
+  margin: 1.2rem 0;
 }
 
 /* 글 안에 들어가는 시뮬 자리(placeholder) — 내용은 나중에 Cowork에서 채움 */

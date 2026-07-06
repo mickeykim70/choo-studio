@@ -14,8 +14,11 @@
     "@astrojs/react": "^6.0.1",
     "@fontsource/gaegu": "^5.2.8",
     "astro": "^7.0.6",
+    "katex": "^0.16.11",
     "react": "^19.2.7",
     "react-dom": "^19.2.7",
+    "rehype-katex": "^7.0.1",
+    "remark-math": "^6.0.0",
     "roughjs": "^4.6.6"
   },
   "devDependencies": {
